@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-4">Stock Price Prediction</h1>
+        <form action="{{ url_for('predict_stock_price') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Upload CSV File:</label>
+                <input type="file" name="file" id="file" required>
+            </div>
+            <div class="form-group">
+                <label for="duration">Select Prediction Duration:</label>
+                <select name="duration" id="duration">
+                    <option value="1 Week">1 Week</option>
+                    <option value="1 Month">1 Month</option>
+                    <option value="1 Year">1 Year</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Predict</button>
+            </div>
+        </form>
+        {% if prediction is defined %}
+        <h3>Predicted Price {{ duration }}: {{ prediction }}</h3>
+        {% endif %}
+
+        {% if prices is defined %}
+        <h3>List of Prices {{ duration }}:</h3>
+        <ul>
+            {% for price in prices %}
+            <li>{{ price }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div id="chart-container">
+            <h3>Price Chart:</h3>
+            {% if chart_data is defined %}
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Price Chart">
+            {% else %}
+            <p>No chart data available.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
